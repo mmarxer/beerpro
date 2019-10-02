@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1069858096532",
+    "firebase_url": "https://androidminiprojekt-36017.firebaseio.com",
+    "project_id": "androidminiprojekt-36017",
+    "storage_bucket": "androidminiprojekt-36017.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069858096532:android:1297731013846f44c87b81",
+        "android_client_info": {
+          "package_name": "ch.beerpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069858096532-sshl6rdr92cf71f54n5ra1eh4mpun2q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.beerpro",
+            "certificate_hash": "314c51aeae8eed1926afa5dd35faf922d70ad248"
+          }
+        },
+        {
+          "client_id": "1069858096532-3b1ia1fkn2ds2iil3ce82ti6qej8u4te.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6c_qxE5XUyQ9BrGlBqo8ul-kh2yR4BbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069858096532-3b1ia1fkn2ds2iil3ce82ti6qej8u4te.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
