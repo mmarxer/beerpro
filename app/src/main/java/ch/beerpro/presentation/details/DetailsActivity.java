@@ -79,6 +79,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.shareButton)
+    Button share;
+
     private RatingsRecyclerViewAdapter adapter;
 
     private DetailsViewModel model;
@@ -112,6 +115,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         recyclerView.setAdapter(adapter);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
+        share.setOnClickListener(v -> onShareListener());
     }
 
     private void addNewRating(RatingBar ratingBar, float v, boolean b) {
@@ -197,5 +201,15 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     public void onFridgeClickedListener(View view) {
         model.addToFridge(model.getBeer().getValue().getId());
+    }
+
+    public void onShareListener() {
+        Beer beer = model.getBeer().getValue();
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareText = "Schau dir mal dieses Bier an '" + beer.getName() + "'\nhttp://www.beers.com/detail?data=" + beer.getId();
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Bier mit Freunden teilen");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        startActivity(Intent.createChooser(sharingIntent, "Sharing Option"));
     }
 }
