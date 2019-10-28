@@ -6,9 +6,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -125,6 +127,14 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         View view = getLayoutInflater().inflate(R.layout.single_bottom_sheet_dialog, null);
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(view);
+        Button addToFridge = dialog.findViewById(R.id.addToFridge);
+        addToFridge.setOnClickListener(v -> {
+            onFridgeClickedListener(v);
+            Toast toast = Toast.makeText(DetailsActivity.this, "Das Bier wurde zum Kühlschrank hinzugefügt.", Toast.LENGTH_SHORT);
+            toast.show();
+            dialog.dismiss();
+        });
+
         dialog.show();
     }
 
@@ -183,5 +193,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onFridgeClickedListener(View view) {
+        model.addToFridge(model.getBeer().getValue().getId());
     }
 }
