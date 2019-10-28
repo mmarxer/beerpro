@@ -3,7 +3,9 @@ package ch.beerpro.presentation.details;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -22,7 +25,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +94,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     private DetailsViewModel model;
 
+    private GoogleApiClient mGoogleApiClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +125,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         recyclerView.setAdapter(adapter);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
         share.setOnClickListener(v -> onShareListener());
+
     }
 
     private void addNewRating(RatingBar ratingBar, float v, boolean b) {
@@ -207,7 +217,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         Beer beer = model.getBeer().getValue();
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareText = "Schau dir mal dieses Bier an '" + beer.getName() + "'\nhttp://www.beers.com/detail?data=" + beer.getId();
+        String shareText = "Schau dir mal dieses Bier an '" + beer.getName() + "'\nhttps://bieraffe.page.link/bier" + beer.getId();
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Bier mit Freunden teilen");
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         startActivity(Intent.createChooser(sharingIntent, "Sharing Option"));

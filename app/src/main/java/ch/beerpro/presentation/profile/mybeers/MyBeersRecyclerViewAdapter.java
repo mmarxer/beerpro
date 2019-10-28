@@ -129,21 +129,20 @@ public class MyBeersRecyclerViewAdapter extends ListAdapter<MyBeer, MyBeersRecyc
             numRatings.setText(itemView.getResources().getString(R.string.fmt_num_ratings, item.getNumRatings()));
             itemView.setOnClickListener(v -> listener.onMoreClickedListener(photo, item));
             removeFromWishlist.setOnClickListener(v -> listener.onWishClickedListener(item));
+            String formattedDate =
+                    DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(entry.getDate());
+            addedAt.setText(formattedDate);
 
             if (entry.getFridgeBeer() != null) {
                 FridgeBeer fridgeBeer = entry.getFridgeBeer();
-                amount.setText(String.format(Locale.GERMAN, "%d %s", fridgeBeer.getAmount(), "Biere"));
                 addToFridge.setOnClickListener(v -> listener.onFridgeAddClickedListener(fridgeBeer));
                 removeFromFridge.setOnClickListener(v -> listener.onFridgeRemoveClickedListener(fridgeBeer));
+                amount.setText(String.format(Locale.GERMAN, "%d %s", fridgeBeer.getAmount(), "Biere"));
             } else {
                 addToFridge.setOnClickListener(v -> listener.onAddNewClickedListener(item));
                 removeFromFridge.setVisibility(View.INVISIBLE);
                 amount.setText("0 Biere");
             }
-
-            String formattedDate =
-                    DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(entry.getDate());
-            addedAt.setText(formattedDate);
 
             if (entry instanceof MyBeerFromWishlist) {
                 DrawableHelpers
