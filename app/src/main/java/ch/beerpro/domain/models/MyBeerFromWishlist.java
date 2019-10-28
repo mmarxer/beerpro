@@ -7,6 +7,7 @@ import java.util.Date;
 public class MyBeerFromWishlist implements MyBeer {
     private Wish wish;
     private Beer beer;
+    private FridgeBeer fridgeBeer;
 
     public MyBeerFromWishlist(Wish wish, Beer beer) {
         this.wish = wish;
@@ -38,6 +39,16 @@ public class MyBeerFromWishlist implements MyBeer {
     public void setBeer(Beer beer) {
         this.beer = beer;
     }
+
+    public FridgeBeer getFridgeBeer() {
+        return this.fridgeBeer;
+    }
+
+    @Override
+    public void setFridgeItem(FridgeBeer fridgeBeer) {
+        this.fridgeBeer = fridgeBeer;
+    }
+
 
     public boolean equals(final Object o) {
         if (o == this) return true;

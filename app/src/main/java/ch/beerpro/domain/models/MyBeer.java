@@ -8,4 +8,7 @@ public interface MyBeer {
     Beer getBeer();
 
     Date getDate();
+
+    FridgeBeer getFridgeBeer();
+    void setFridgeItem(FridgeBeer fridgeBeer);
 }

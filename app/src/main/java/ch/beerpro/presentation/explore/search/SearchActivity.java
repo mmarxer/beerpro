@@ -19,6 +19,7 @@ import com.google.common.base.Strings;
 
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.details.DetailsActivity;
 import ch.beerpro.presentation.explore.search.beers.SearchResultFragment;
 import ch.beerpro.presentation.explore.search.suggestions.SearchSuggestionsFragment;
@@ -110,5 +111,21 @@ public class SearchActivity extends AppCompatActivity
     @Override
     public void onWishClickedListener(Beer item) {
         searchViewModel.toggleItemInWishlist(item.getId());
+    }
+
+    @Override
+    public void onAddNewClickedListener(Beer item) {
+
+    }
+
+
+    @Override
+    public void onFridgeAddClickedListener(FridgeBeer fridgeBeer) {
+
+    }
+
+    @Override
+    public void onFridgeRemoveClickedListener(FridgeBeer fridgeBeer) {
+
     }
 }

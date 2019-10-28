@@ -7,6 +7,14 @@ import androidx.lifecycle.MediatorLiveData;
 
 import org.apache.commons.lang3.tuple.Triple;
 
+import java.util.HashMap;
+import java.util.List;
+
+import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.BeerListings;
+import ch.beerpro.domain.models.Rating;
+import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.models.FridgeBeer;
 public class LiveDataExtensions {
 
     public static <A, B> LiveData<Pair<A, B>> zip(LiveData<A> as, LiveData<B> bs) {
@@ -91,5 +99,44 @@ public class LiveDataExtensions {
                 }
             }
         };
+    }
+        public static LiveData<BeerListings> combineLatest(
+                LiveData<List<Wish>> wishes,
+                LiveData<List< Rating >> ratings,
+                LiveData<List<FridgeBeer>> fridgeBeers,
+                LiveData<HashMap<String, Beer >> beers) {
+            return new MediatorLiveData<BeerListings>() {
+                List<Wish> lastWishes = null;
+                List<Rating> lastRatings = null;
+                List<FridgeBeer> lastFridgeBeers = null;
+                HashMap<String, Beer> lastBeers = null;
+
+                {
+                    {
+                        addSource(wishes, (List<Wish> wishList) -> {
+                            lastWishes = wishList;
+                            update();
+                        });
+                        addSource(ratings, (List<Rating> ratingsList) -> {
+                            lastRatings = ratingsList;
+                            update();
+                        });
+                        addSource(fridgeBeers, (List<FridgeBeer> fridgeItemList) -> {
+                            lastFridgeBeers = fridgeItemList;
+                            update();
+                        });
+                        addSource(beers, (HashMap<String, Beer> beerHashMap) -> {
+                            lastBeers = beerHashMap;
+                            update();
+                        });
+                    }
+                }
+
+                private void update() {
+                    if (lastWishes != null && lastRatings != null && lastFridgeBeers != null && lastBeers != null) {
+                        this.setValue(new BeerListings(lastBeers, lastWishes, lastRatings, lastFridgeBeers));
+                    }
+                }
+            };
     }
 }
