@@ -91,7 +91,7 @@ public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemIn
     }
 
     @Override
-    public void onFridgeAddClickedListener(Beer item) {
+    public void onAddNewClickedListener(Beer item) {
         model.addToFridge(item);
     }
 
