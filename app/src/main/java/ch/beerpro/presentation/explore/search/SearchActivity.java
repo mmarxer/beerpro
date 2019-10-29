@@ -25,10 +25,11 @@ import ch.beerpro.presentation.explore.search.beers.SearchResultFragment;
 import ch.beerpro.presentation.explore.search.suggestions.SearchSuggestionsFragment;
 import ch.beerpro.presentation.profile.mybeers.MyBeersViewModel;
 import ch.beerpro.presentation.profile.mybeers.OnMyBeerItemInteractionListener;
+import ch.beerpro.presentation.profile.myfridge.OnFridgeItemInteractionListener;
 
 public class SearchActivity extends AppCompatActivity
         implements SearchResultFragment.OnItemSelectedListener, SearchSuggestionsFragment.OnItemSelectedListener,
-        OnMyBeerItemInteractionListener {
+        OnMyBeerItemInteractionListener, OnFridgeItemInteractionListener {
 
     private SearchViewModel searchViewModel;
     private ViewPagerAdapter adapter;
@@ -115,17 +116,17 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public void onAddNewClickedListener(Beer item) {
-
+        myBeersViewModel.addToFridge(item);
     }
 
 
     @Override
     public void onFridgeAddClickedListener(FridgeBeer fridgeBeer) {
-
+        myBeersViewModel.addToFridge(fridgeBeer);
     }
 
     @Override
     public void onFridgeRemoveClickedListener(FridgeBeer fridgeBeer) {
-
+        myBeersViewModel.removeFromFridge(fridgeBeer);
     }
 }

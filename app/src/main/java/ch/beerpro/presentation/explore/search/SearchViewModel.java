@@ -14,6 +14,7 @@ import java.util.List;
 
 import ch.beerpro.data.repositories.BeersRepository;
 import ch.beerpro.data.repositories.CurrentUser;
+import ch.beerpro.data.repositories.FridgeRepository;
 import ch.beerpro.data.repositories.SearchesRepository;
 import ch.beerpro.data.repositories.WishlistRepository;
 import ch.beerpro.domain.models.Beer;
@@ -33,12 +34,14 @@ public class SearchViewModel extends ViewModel implements CurrentUser {
     private final BeersRepository beersRepository;
     private final WishlistRepository wishlistRepository;
     private final SearchesRepository searchesRepository;
+    private final FridgeRepository fridgeRepository;
     private final LiveData<List<Search>> myLatestSearches;
 
     public SearchViewModel() {
         beersRepository = new BeersRepository();
         wishlistRepository = new WishlistRepository();
         searchesRepository = new SearchesRepository();
+        fridgeRepository = new FridgeRepository();
         filteredBeers = map(zip(searchTerm, getAllBeers()), SearchViewModel::filter);
         myLatestSearches = switchMap(currentUserId, SearchesRepository::getLatestSearchesByUser);
 
@@ -86,5 +89,9 @@ public class SearchViewModel extends ViewModel implements CurrentUser {
 
     public void addToSearchHistory(String term) {
         searchesRepository.addSearchTerm(term);
+    }
+
+    public void addToFridge(Beer item) {
+        fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), item.getId());
     }
 }
