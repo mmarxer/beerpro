@@ -19,11 +19,15 @@ import ch.beerpro.data.repositories.CurrentUser;
 import ch.beerpro.data.repositories.LikesRepository;
 import ch.beerpro.data.repositories.RatingsRepository;
 import ch.beerpro.data.repositories.WishlistRepository;
+import ch.beerpro.data.repositories.*;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.BeerPrice;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 import ch.beerpro.presentation.utils.EntityClassSnapshotParser;
+import com.google.android.gms.tasks.Task;
+
+import java.util.List;
 
 public class DetailsViewModel extends ViewModel implements CurrentUser {
 
@@ -39,6 +43,7 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
     private final RatingsRepository ratingsRepository;
     private EntityClassSnapshotParser<Rating> parser = new EntityClassSnapshotParser<>(Rating.class);
 
+    private final FridgeRepository fridgeRepository;
 
     public DetailsViewModel() {
         // TODO We should really be injecting these!
@@ -46,6 +51,7 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
         ratingsRepository = new RatingsRepository();
         likesRepository = new LikesRepository();
         wishlistRepository = new WishlistRepository();
+        fridgeRepository = new FridgeRepository();
 
 //        MutableLiveData<String> currentUserId = new MutableLiveData<>();
         beer = beersRepository.getBeer(beerId);
@@ -102,5 +108,7 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
                         throw task.getException();
                     }
                 });
+    public void addToFridge(String beerId) {
+        fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), beerId);
     }
 }

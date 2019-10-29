@@ -33,9 +33,18 @@
             android:label="@string/title_activity_single_beer"
             android:parentActivityName=".presentation.explore.search.SearchActivity"
             android:theme="@style/DetailsPageTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data android:scheme="https"
+                    android:host="bieraffe.page.link" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.explore.search.SearchActivity" />
+
         </activity>
         <activity
             android:name=".presentation.details.createrating.CreateRatingActivity"
@@ -70,6 +79,15 @@
         <activity
             android:name=".presentation.profile.mybeers.MyBeersActivity"
             android:label="@string/title_activity_mybeers"
+            android:parentActivityName=".presentation.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.MainActivity" />
+        </activity>
+        <activity
+            android:name=".presentation.profile.myfridge.FridgeActivity"
+            android:label="@string/title_activity_fridge"
             android:parentActivityName=".presentation.MainActivity"
             android:theme="@style/AppTheme">
             <meta-data

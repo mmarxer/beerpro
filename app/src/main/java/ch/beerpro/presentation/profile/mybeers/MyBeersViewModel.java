@@ -14,12 +14,14 @@ import java.util.List;
 
 import ch.beerpro.data.repositories.BeersRepository;
 import ch.beerpro.data.repositories.CurrentUser;
+import ch.beerpro.data.repositories.FridgeRepository;
 import ch.beerpro.data.repositories.MyBeersRepository;
 import ch.beerpro.data.repositories.PriceRepository;
 import ch.beerpro.data.repositories.RatingsRepository;
 import ch.beerpro.data.repositories.WishlistRepository;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.BeerPrice;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
@@ -33,6 +35,7 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
     private final MutableLiveData<String> searchTerm = new MutableLiveData<>();
 
     private final WishlistRepository wishlistRepository;
+    private final FridgeRepository fridgeRepository;
     private final LiveData<List<MyBeer>> myFilteredBeers;
 
     public MyBeersViewModel() {
@@ -42,6 +45,7 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
         MyBeersRepository myBeersRepository = new MyBeersRepository();
         RatingsRepository ratingsRepository = new RatingsRepository();
         PriceRepository priceRepository = new PriceRepository();
+        fridgeRepository = new FridgeRepository();
 
         LiveData<List<Beer>> allBeers = beersRepository.getAllBeers();
         MutableLiveData<String> currentUserId = new MutableLiveData<>();
@@ -50,6 +54,9 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
         LiveData<List<BeerPrice>> myPrices = priceRepository.getMyPrices(currentUserId);
 
         LiveData<List<MyBeer>> myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myPrices);
+        LiveData<List<FridgeBeer>> myFridgeBeers = fridgeRepository.getMyFridgeBeers(currentUserId);
+
+        LiveData<List<MyBeer>> myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridgeBeers);
 
         myFilteredBeers = map(zip(searchTerm, myBeers), MyBeersViewModel::filter);
 
@@ -84,5 +91,17 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
 
     public void setSearchTerm(String searchTerm) {
         this.searchTerm.setValue(searchTerm);
+    }
+
+    public void addToFridge(FridgeBeer fridgeBeer) {
+        fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), fridgeBeer.getBeerId());
+    }
+
+    public void removeFromFridge(FridgeBeer fridgeBeer) {
+        fridgeRepository.removeFridgeBeer(getCurrentUser().getUid(), fridgeBeer.getBeerId());
+    }
+
+    public void addToFridge(Beer item) {
+        fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), item.getId());
     }
 }

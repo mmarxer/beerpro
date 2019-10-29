@@ -7,6 +7,7 @@ import java.util.Date;
 public class MyBeerFromRating implements MyBeer {
     private Rating rating;
     private Beer beer;
+    private FridgeBeer fridgeBeer;
 
     public MyBeerFromRating(Rating rating, Beer beer) {
         this.rating = rating;
@@ -37,6 +38,14 @@ public class MyBeerFromRating implements MyBeer {
 
     public void setBeer(Beer beer) {
         this.beer = beer;
+    }
+
+    public FridgeBeer getFridgeBeer() {
+        return this.fridgeBeer;
+    }
+    @Override
+    public void setFridgeItem(FridgeBeer fridgeBeer) {
+        this.fridgeBeer = fridgeBeer;
     }
 
     public boolean equals(final Object o) {

@@ -5,4 +5,9 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="grid_layout_margin">1dp</dimen>
     <dimen name="app_bar_height">200dp</dimen>
+
+    <dimen name="listentry_margin_start">16dp</dimen>
+    <dimen name="listentry_margin_top">8dp</dimen>
+    <dimen name="listentry_text_size">12sp</dimen>
+    <dimen name="listentry_button_text_size">10sp</dimen>
 </resources>

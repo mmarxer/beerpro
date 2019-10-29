@@ -17,6 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,6 +29,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -34,7 +40,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,12 +120,16 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.shareButton)
+    Button share;
+
     private RatingsRecyclerViewAdapter adapter;
 
     private DetailsViewModel model;
     private String beerId;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+    private GoogleApiClient mGoogleApiClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,6 +193,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     private void setPersonalAvgRating(float rating) {
         addRatingBar.setRating(rating);
+        addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
+        share.setOnClickListener(v -> onShareListener());
+
     }
 
     private void addNewRating(RatingBar ratingBar, float v, boolean b) {
@@ -208,6 +226,14 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         View view = getLayoutInflater().inflate(R.layout.single_bottom_sheet_dialog, null);
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(view);
+        Button addToFridge = dialog.findViewById(R.id.addToFridge);
+        addToFridge.setOnClickListener(v -> {
+            onFridgeClickedListener(v);
+            Toast toast = Toast.makeText(DetailsActivity.this, "Das Bier wurde zum Kühlschrank hinzugefügt.", Toast.LENGTH_SHORT);
+            toast.show();
+            dialog.dismiss();
+        });
+
         dialog.show();
 
         View addPrivateNote = view.findViewById(R.id.addPrivateNote);
@@ -347,5 +373,20 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+}
+
+    public void onFridgeClickedListener(View view) {
+        model.addToFridge(model.getBeer().getValue().getId());
+    }
+
+    public void onShareListener() {
+        Beer beer = model.getBeer().getValue();
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareText = "Schau dir mal dieses Bier an '" + beer.getName() + "'\nhttps://bieraffe.page.link/bier" + beer.getId();
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Bier mit Freunden teilen");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        startActivity(Intent.createChooser(sharingIntent, "Sharing Option"));
     }
 }
