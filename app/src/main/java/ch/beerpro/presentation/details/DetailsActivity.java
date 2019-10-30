@@ -386,7 +386,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         builder.scheme("https")
                 .authority("bieraffe.page.link")
-                .appendPath("beerdetails")
                 .appendQueryParameter("currentBeer", currentBeer);
 
         DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
