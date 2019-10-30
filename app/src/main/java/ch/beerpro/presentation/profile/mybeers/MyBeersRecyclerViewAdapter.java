@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.util.Locale;
 
@@ -109,6 +111,10 @@ public class MyBeersRecyclerViewAdapter extends ListAdapter<MyBeer, MyBeersRecyc
 
         @BindView(R.id.amount)
         TextView amount;
+
+        @BindView(R.id.noteText)
+        TextView noteText;
+
 
         ViewHolder(View view) {
             super(view);

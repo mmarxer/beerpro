@@ -44,6 +44,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
@@ -194,7 +195,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     private void setPersonalAvgRating(float rating) {
         addRatingBar.setRating(rating);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
-        share.setOnClickListener(v -> onShareListener());
+     //   share.setOnClickListener(v -> onShareListener());
 
     }
 
@@ -206,20 +207,8 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         startActivity(intent, options.toBundle());
     }
 
-    @OnClick(R.id.shareButton)
-    public void shareBeer() {
-        final Intent intent = new Intent(Intent.ACTION_SEND);
-        final String uri = "https://www.beerpro.ch/beer/" + beerId;
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Let's share this beer: " + uri + "\n" + manufacturer.getText() + "\n" + name.getText());
 
-        try {
-            startActivity(Intent.createChooser(intent, "Select an action"));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "This is my Toast message!", Toast.LENGTH_SHORT).show();
-        }
 
-    }
 
     @OnClick(R.id.actionsButton)
     public void showBottomSheetDialog() {
@@ -387,6 +376,31 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Bier mit Freunden teilen");
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         startActivity(Intent.createChooser(sharingIntent, "Sharing Option"));
+    }
+
+    @OnClick(R.id.shareButton)
+    public void onShareBeerClickedListener(View view) {
+        Intent sendIntent = new Intent();
+        String currentBeer = model.getBeer().getValue().getId();
+        Uri.Builder builder = new Uri.Builder();
+
+        builder.scheme("https")
+                .authority("bieraffe.page.link")
+                .appendPath("beerdetails")
+                .appendQueryParameter("currentBeer", currentBeer);
+
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(builder.build())
+                .setDomainUriPrefix("bieraffe.page.link")
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                .buildDynamicLink();
+
+        Uri dynamicLinkUri = dynamicLink.getUri();
+
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Schau dir dieses Bier an: " + dynamicLinkUri.toString());
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, ""));
     }
 }
 

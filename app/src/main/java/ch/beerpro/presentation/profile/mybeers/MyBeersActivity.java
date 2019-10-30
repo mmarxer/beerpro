@@ -2,6 +2,7 @@ package ch.beerpro.presentation.profile.mybeers;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -104,4 +105,5 @@ public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemIn
     public void onFridgeRemoveClickedListener(FridgeBeer fridgeBeer) {
         model.removeFromFridge(fridgeBeer);
     }
+
 }
