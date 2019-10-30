@@ -155,20 +155,19 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/category">
 
-                            <TextView
-                                android:id="@+id/avgPriceText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Preis" />
-
-                            <TextView
-                                android:id="@+id/avgPrice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="8sp"
-                                android:text="0.0" />
 
                         </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/avgPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Durchschnittlich 2.000000000000000000001 CHF pro Flasche"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/category"
+                            />
 
                         <View
                             android:id="@+id/separator3"

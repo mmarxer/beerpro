@@ -9,6 +9,8 @@ import java.io.Serializable;
 public class Beer implements Entity, Serializable {
 
     public static final String COLLECTION = "beers";
+    public static final String FIELD_AVGPRICE = "avgPrice";
+    public static final String FIELD_NUMPRICES = "numPrices";
 
     @Exclude
     private String id;
@@ -21,7 +23,7 @@ public class Beer implements Entity, Serializable {
     private float avgPrice;
     private int numPrices;
 
-    public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings) {
+    public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings, float avgPrice) {
         this.id = id;
         this.manufacturer = manufacturer;
         this.name = name;
@@ -29,6 +31,20 @@ public class Beer implements Entity, Serializable {
         this.photo = photo;
         this.avgRating = avgRating;
         this.numRatings = numRatings;
+        this.avgPrice = avgPrice;
+    }
+
+    public Beer(String id, String manufacturer, String name, String category, String photo, float avgRating, int numRatings,
+                float avgPrice, int numPrices, float minimumPrice, float maximumPrice) {
+        this.id = id;
+        this.manufacturer = manufacturer;
+        this.name = name;
+        this.category = category;
+        this.photo = photo;
+        this.avgRating = avgRating;
+        this.numRatings = numRatings;
+        this.avgPrice = avgPrice;
+        this.numPrices = numPrices;
 
     }
 
@@ -165,4 +181,9 @@ public class Beer implements Entity, Serializable {
     public String toString() {
         return "Beer(id=" + this.getId() + ", manufacturer=" + this.getManufacturer() + ", name=" + this.getName() + ", category=" + this.getCategory() + ", photo=" + this.getPhoto() + ", avgRating=" + this.getAvgRating() + ", numRatings=" + this.getNumRatings() + ")";
     }
+
+    public void setAvgPrice(float avgPrice) {
+        this.avgPrice = avgPrice;
+    }
+
 }

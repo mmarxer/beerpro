@@ -3,6 +3,7 @@ package ch.beerpro.data.repositories;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -65,5 +66,13 @@ public class BeersRepository {
     public LiveData<List<String>> getBeerManufacturers() {
         return map(allBeers, mapBeersToManufacturers);
     }
+
+    public static void updatePrice(Beer beer) {
+        DocumentReference document = FirebaseFirestore.getInstance().collection(Beer.COLLECTION).document(beer.getId());
+
+        document.update(Beer.FIELD_AVGPRICE,beer.getAvgPrice());
+        document.update(Beer.FIELD_NUMPRICES,beer.getNumPrices());
+    }
+
 
 }

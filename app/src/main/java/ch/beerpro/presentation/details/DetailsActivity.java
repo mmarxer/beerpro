@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,6 +61,7 @@ import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
+import ch.beerpro.presentation.details.Price.PriceFragment;
 import ch.beerpro.presentation.details.createrating.CreateRatingActivity;
 
 import static ch.beerpro.presentation.utils.DrawableHelpers.setDrawableTint;
@@ -223,6 +225,12 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
             dialog.dismiss();
         });
 
+        view.findViewById(R.id.addPrice).setOnClickListener(v -> {
+            DialogFragment newFragment = new PriceFragment();
+            newFragment.show(getSupportFragmentManager(), "missiles");
+
+        });
+
         dialog.show();
 
         View addPrivateNote = view.findViewById(R.id.addPrivateNote);
@@ -231,8 +239,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         View addRating = view.findViewById(R.id.addRating);
         addRating.setOnClickListener(getRatingListener());
 
-        View addPrice = view.findViewById(R.id.addPrice);
-        addPrice.setOnClickListener(getPriceListener());
     }
 
 
@@ -287,24 +293,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         noteText.setText(note);
     }
 
-    private View.OnClickListener getPriceListener() {
-        return view -> showPriceDialog(view.getContext());
-    }
-
-    private void showPriceDialog(Context context) {
-        EditText price = new EditText(context);
-        price.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        price.setHint("Preis");
-        price.setFilters(new InputFilter[]{new DetailInput()});
-        new AlertDialog.Builder(context)
-                .setTitle("Preis festlegen:")
-                .setView(price)
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    model.savePrice(beerId, Float.parseFloat(price.getText().toString()));
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
-    }
 
     private void updateBeer(Beer item) {
         name.setText(item.getName());
@@ -319,6 +307,10 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         numRatings.setText(getResources().getString(R.string.fmt_ratings, item.getNumRatings()));
         avgPrice.setText(String.valueOf(item.getAvgPrice()) + "$");
         toolbar.setTitle(item.getName());
+        if (item.getNumPrices() == 0) { avgPrice.setText("-- CHF");}
+        else {
+            avgPrice.setText("Average: " + item.getAvgPrice() + " aus " + item.getNumPrices());
+        }
     }
 
     private void updateRatings(List<Rating> ratings) {
@@ -400,6 +392,10 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Schau dir dieses Bier an: " + dynamicLinkUri.toString());
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, ""));
+    }
+
+    public void updatePrice(float priceInput) {
+        model.updateBeerPrice(priceInput);
     }
 }
 

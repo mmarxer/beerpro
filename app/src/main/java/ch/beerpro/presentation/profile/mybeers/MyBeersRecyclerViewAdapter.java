@@ -169,7 +169,7 @@ public class MyBeersRecyclerViewAdapter extends ListAdapter<MyBeer, MyBeersRecyc
                 DrawableHelpers.setDrawableTint(removeFromWishlist,
                         itemView.getResources().getColor(android.R.color.darker_gray));
                 removeFromWishlist.setText("Wunschliste");
-                onTheListSince.setText("Preis hinzugefügt am");
+                onTheListSince.setText("Price hinzugefügt am");
             }
         }
     }
