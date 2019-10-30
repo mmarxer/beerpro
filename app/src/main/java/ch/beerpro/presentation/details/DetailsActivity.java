@@ -374,7 +374,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
                 return super.onOptionsItemSelected(item);
         }
     }
-}
 
     public void onFridgeClickedListener(View view) {
         model.addToFridge(model.getBeer().getValue().getId());
@@ -390,3 +389,5 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         startActivity(Intent.createChooser(sharingIntent, "Sharing Option"));
     }
 }
+
+

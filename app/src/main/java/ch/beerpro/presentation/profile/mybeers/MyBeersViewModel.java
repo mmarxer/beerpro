@@ -20,6 +20,7 @@ import ch.beerpro.data.repositories.PriceRepository;
 import ch.beerpro.data.repositories.RatingsRepository;
 import ch.beerpro.data.repositories.WishlistRepository;
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.BeerListings;
 import ch.beerpro.domain.models.BeerPrice;
 import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
@@ -52,11 +53,10 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
         LiveData<List<Wish>> myWishlist = wishlistRepository.getMyWishlist(currentUserId);
         LiveData<List<Rating>> myRatings = ratingsRepository.getMyRatings(currentUserId);
         LiveData<List<BeerPrice>> myPrices = priceRepository.getMyPrices(currentUserId);
-
-        LiveData<List<MyBeer>> myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myPrices);
         LiveData<List<FridgeBeer>> myFridgeBeers = fridgeRepository.getMyFridgeBeers(currentUserId);
 
-        LiveData<List<MyBeer>> myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridgeBeers);
+
+        LiveData<List<MyBeer>> myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridgeBeers, myPrices);
 
         myFilteredBeers = map(zip(searchTerm, myBeers), MyBeersViewModel::filter);
 
@@ -81,9 +81,10 @@ public class MyBeersViewModel extends ViewModel implements CurrentUser {
         return filtered;
     }
 
-    public LiveData<List<MyBeer>> getMyFilteredBeers() {
+    public LiveData<List<MyBeer>> getMyFilteredBeersList() {
         return myFilteredBeers;
     }
+
 
     public void toggleItemInWishlist(String beerId) {
         wishlistRepository.toggleUserWishlistItem(getCurrentUser().getUid(), beerId);

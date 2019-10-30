@@ -31,6 +31,16 @@ public class BeerFromPreis implements MyBeer {
     }
 
     @Override
+    public FridgeBeer getFridgeBeer() {
+        return null;
+    }
+
+    @Override
+    public void setFridgeItem(FridgeBeer fridgeBeer) {
+
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

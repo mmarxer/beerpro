@@ -12,6 +12,7 @@ import java.util.List;
 
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.BeerListings;
+import ch.beerpro.domain.models.BeerPrice;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 import ch.beerpro.domain.models.FridgeBeer;
@@ -101,8 +102,8 @@ public class LiveDataExtensions {
         };
     }
 
-    public static <A, B, C, D> LiveData<quadrupel<A, B, C, D>> combineLatest(LiveData<A> as, LiveData<B> bs, LiveData<C> cs, LiveData<D> ds) {
-        return new MediatorLiveData<quadrupel<A, B, C, D>>() {
+    public static <A, B, C, D> LiveData<BeerCart<A, B, C, D>> combineLatestData(LiveData<A> as, LiveData<B> bs, LiveData<C> cs, LiveData<D> ds) {
+        return new MediatorLiveData<BeerCart<A, B, C, D>>() {
 
             A lastA = null;
             B lastB = null;
@@ -132,47 +133,49 @@ public class LiveDataExtensions {
 
             private void update() {
                 if (lastA != null && lastB != null && lastC != null && lastD != null) {
-                    this.setValue(new quadrupel(lastA, lastB, lastC, lastD));
+                    this.setValue(new BeerCart(lastA, lastB, lastC, lastD));
                 }
             }
         };
-        public static LiveData<BeerListings> combineLatest(
-                LiveData<List<Wish>> wishes,
-                LiveData<List< Rating >> ratings,
-                LiveData<List<FridgeBeer>> fridgeBeers,
-                LiveData<HashMap<String, Beer >> beers) {
-            return new MediatorLiveData<BeerListings>() {
-                List<Wish> lastWishes = null;
-                List<Rating> lastRatings = null;
-                List<FridgeBeer> lastFridgeBeers = null;
-                HashMap<String, Beer> lastBeers = null;
+    }
+    public static LiveData<BeerListings> combineLatest(LiveData<List<Wish>> wishes, LiveData<List< Rating >> ratings, LiveData<List<FridgeBeer>> fridgeBeers, LiveData<HashMap<String, Beer >> beers, LiveData<List<BeerPrice>> prices) {
+        return new MediatorLiveData<BeerListings>() {
+            List<Wish> lastWishes = null;
+            List<Rating> lastRatings = null;
+            List<FridgeBeer> lastFridgeBeers = null;
+            HashMap<String, Beer> lastBeers = null;
+            List<BeerPrice> lastPriceBeers = null;
 
+            {
                 {
-                    {
-                        addSource(wishes, (List<Wish> wishList) -> {
-                            lastWishes = wishList;
-                            update();
-                        });
-                        addSource(ratings, (List<Rating> ratingsList) -> {
-                            lastRatings = ratingsList;
-                            update();
-                        });
-                        addSource(fridgeBeers, (List<FridgeBeer> fridgeItemList) -> {
-                            lastFridgeBeers = fridgeItemList;
-                            update();
-                        });
-                        addSource(beers, (HashMap<String, Beer> beerHashMap) -> {
-                            lastBeers = beerHashMap;
-                            update();
-                        });
-                    }
+                    addSource(wishes, (List<Wish> wishList) -> {
+                        lastWishes = wishList;
+                        update();
+                    });
+                    addSource(ratings, (List<Rating> ratingsList) -> {
+                        lastRatings = ratingsList;
+                        update();
+                    });
+                    addSource(fridgeBeers, (List<FridgeBeer> fridgeItemList) -> {
+                        lastFridgeBeers = fridgeItemList;
+                        update();
+                    });
+                    addSource(beers, (HashMap<String, Beer> beerHashMap) -> {
+                        lastBeers = beerHashMap;
+                        update();
+                    });
+                    addSource(prices, (List<BeerPrice> beerPriceList) ->{
+                        lastPriceBeers = beerPriceList;
+                        update();
+                    });
                 }
+            }
 
-                private void update() {
-                    if (lastWishes != null && lastRatings != null && lastFridgeBeers != null && lastBeers != null) {
-                        this.setValue(new BeerListings(lastBeers, lastWishes, lastRatings, lastFridgeBeers));
-                    }
+            private void update() {
+                if (lastWishes != null && lastRatings != null && lastFridgeBeers != null && lastBeers != null && lastPriceBeers != null) {
+                    this.setValue(new BeerListings(lastBeers, lastWishes, lastRatings, lastFridgeBeers, lastPriceBeers));
                 }
-            };
+            }
+        };
     }
 }

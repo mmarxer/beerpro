@@ -108,6 +108,8 @@ public class DetailsViewModel extends ViewModel implements CurrentUser {
                         throw task.getException();
                     }
                 });
+    }
+
     public void addToFridge(String beerId) {
         fridgeRepository.addFridgeBeer(getCurrentUser().getUid(), beerId);
     }

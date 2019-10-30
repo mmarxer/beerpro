@@ -61,10 +61,9 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         myWishlist = wishlistRepository.getMyWishlist(currentUserId);
         myRatings = ratingsRepository.getMyRatings(currentUserId);
         LiveData<List<BeerPrice>> myPrices = priceRepository.getMyPrices(currentUserId);
-        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myPrices);
 
         myFridge = fridgeRepository.getMyFridgeBeers(currentUserId);
-        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridge);
+        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridge, myPrices);
         /*
          * Set the current user id, which is used as input for the getMyWishlist and getMyRatings calls above.
          * Settings the id does not yet cause any computation or data fetching, only when an observer is subscribed
@@ -75,7 +74,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         currentUserId.setValue(getCurrentUser().getUid());
     }
 
-    public LiveData<List<MyBeer>> getMyBeers() {
+    public LiveData<List<MyBeer>> getMyBeersPrice() {
         return myBeers;
     }
 
