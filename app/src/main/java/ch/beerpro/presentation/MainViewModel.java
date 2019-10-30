@@ -15,9 +15,11 @@ import ch.beerpro.data.repositories.CurrentUser;
 import ch.beerpro.data.repositories.FridgeRepository;
 import ch.beerpro.data.repositories.LikesRepository;
 import ch.beerpro.data.repositories.MyBeersRepository;
+import ch.beerpro.data.repositories.PriceRepository;
 import ch.beerpro.data.repositories.RatingsRepository;
 import ch.beerpro.data.repositories.WishlistRepository;
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.BeerPrice;
 import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
 import ch.beerpro.domain.models.Rating;
@@ -49,6 +51,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         likesRepository = new LikesRepository();
         wishlistRepository = new WishlistRepository();
         ratingsRepository = new RatingsRepository();
+        PriceRepository priceRepository = new PriceRepository();
         fridgeRepository = new FridgeRepository();
         MyBeersRepository myBeersRepository = new MyBeersRepository();
 
@@ -57,8 +60,10 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         MutableLiveData<String> currentUserId = new MutableLiveData<>();
         myWishlist = wishlistRepository.getMyWishlist(currentUserId);
         myRatings = ratingsRepository.getMyRatings(currentUserId);
+        LiveData<List<BeerPrice>> myPrices = priceRepository.getMyPrices(currentUserId);
+
         myFridge = fridgeRepository.getMyFridgeBeers(currentUserId);
-        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridge);
+        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myFridge, myPrices);
         /*
          * Set the current user id, which is used as input for the getMyWishlist and getMyRatings calls above.
          * Settings the id does not yet cause any computation or data fetching, only when an observer is subscribed
@@ -69,7 +74,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         currentUserId.setValue(getCurrentUser().getUid());
     }
 
-    public LiveData<List<MyBeer>> getMyBeers() {
+    public LiveData<List<MyBeer>> getMyBeersPrice() {
         return myBeers;
     }
 

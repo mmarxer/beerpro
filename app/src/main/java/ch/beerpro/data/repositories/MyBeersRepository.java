@@ -2,10 +2,6 @@ package ch.beerpro.data.repositories;
 
 import androidx.lifecycle.LiveData;
 
-import com.google.common.math.Quantiles;
-
-import org.apache.commons.lang3.tuple.Triple;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,20 +10,25 @@ import java.util.List;
 import java.util.Set;
 
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.BeerPrice;
 import ch.beerpro.domain.models.BeerListings;
 import ch.beerpro.domain.models.Entity;
 import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
+import ch.beerpro.domain.models.BeerFromPreis;
 import ch.beerpro.domain.models.MyBeerFromFridge;
 import ch.beerpro.domain.models.MyBeerFromRating;
 import ch.beerpro.domain.models.MyBeerFromWishlist;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.utils.BeerCart;
 
 import static androidx.lifecycle.Transformations.map;
 import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatest;
+import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatestData;
 
 public class MyBeersRepository {
+
 
     private static List<MyBeer> getMyBeers(BeerListings input) {
         List<Wish> wishes = input.getWishes();
@@ -54,6 +55,8 @@ public class MyBeersRepository {
                 beersAlreadyOnTheList.add(beerId);
             }
         }
+
+
         for (FridgeBeer fridgeItem : fridgeBeers) {
             String beerId = fridgeItem.getBeerId();
             if (beersAlreadyOnTheList.contains(beerId)) {
@@ -70,11 +73,8 @@ public class MyBeersRepository {
         return result;
     }
 
-
-    public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist,
-                                             LiveData<List<Rating>> myRatings, LiveData<List<FridgeBeer>> myFridgeBeers) {
-        return map(combineLatest(myWishlist, myRatings, myFridgeBeers, map(allBeers, Entity::entitiesById)),
+    public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist, LiveData<List<Rating>> myRatings, LiveData<List<FridgeBeer>> myFridgeBeers, LiveData<List<BeerPrice>> myPrices) {
+        return map(combineLatest(myWishlist, myRatings, myFridgeBeers, map(allBeers, Entity::entitiesById), myPrices),
                 MyBeersRepository::getMyBeers);
     }
-
 }
